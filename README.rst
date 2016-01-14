@@ -65,7 +65,7 @@ Links
 Packaging
 ---------
 
-All from https://python-packaging-user-guide.readthedocs.org/en/latest/distributing/#universal-wheels
+All from https://python-packaging-user-guide.readthedocs.org/en/latest/distributing/#source-distributions
 
 
 .. code-block:: bash
@@ -89,4 +89,31 @@ All from https://python-packaging-user-guide.readthedocs.org/en/latest/distribut
     >>> from boos import Boos
     >>> booz = Boos("http://boos.fritz.box:8090")
     >>> booz.preset(3)
+
+    # https://packaging.python.org/en/latest/distributing/#uploading-your-project-to-pypi
+    #
+    # to upload it to testpypi (https://wiki.python.org/moin/TestPyPI)
+    # first register the project
+    python setup.py register -r https://testpypi.python.org/pypi
+    # preferred (but not working with me):
+    twine upload -r https://testpypi.python.org/pypi -u rduivenvoorde -p <PASSWORD> dist/*
+    # or
+    python setup.py sdist upload -r https://testpypi.python.org/pypi
+    # after upload install via
+    # search
+    pip search --index https://testpypi.python.org/pypi boos
+    # install
+    pip install -i https://testpypi.python.org/pypi boos
+
+    # or to pypi
+    # preferred:
+    # first register project
+    python setup.py register
+    # then preferred
+    twine upload dist/*
+    # or
+    python setup.py sdist upload -r https://pypi.python.org/pypi
+    # and install
+    pip install boos
+
 

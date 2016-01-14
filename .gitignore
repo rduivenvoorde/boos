@@ -3,6 +3,7 @@
 .idea
 .coverage
 .noseids
+.pypirc
 boos.egg-info
 build
 dist
