@@ -3,3 +3,6 @@
 .idea
 .coverage
 .noseids
+boos.egg-info
+build
+dist

@@ -61,3 +61,13 @@ Links
 - As an alternative have a look at https://github.com/chassing/badtouch
 - Bose SoundTouch (R) API http://products.bose.com/api-developer/index.html
 - Home Assistant https://home-assistant.io/
+
+Packaging
+---------
+
+All from https://python-packaging-user-guide.readthedocs.org/en/latest/distributing/#universal-wheels
+
+
+.. code-block:: bash
+
+    python3 setup.py bdist_wheel
