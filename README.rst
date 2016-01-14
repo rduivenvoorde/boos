@@ -15,14 +15,14 @@ And to be 'my first pip' package :-)
 Installation
 ------------
 
-To install badtouch python library, simply:
+To install boos python library, simply:
 
 .. code-block:: shell
 
-    pip install badtouch
+    pip install boos
 
 
-``badtouch`` requires Python >= 3.4.
+``boos`` requires Python >= 3.4.
 
 
 Quick Start
