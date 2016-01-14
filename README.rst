@@ -70,4 +70,23 @@ All from https://python-packaging-user-guide.readthedocs.org/en/latest/distribut
 
 .. code-block:: bash
 
+    # source dist
+    python3 setup.py sdist
+    # creating a universal wheel?
     python3 setup.py bdist_wheel
+
+    # now setup a local webserver to test
+    cd dist
+    python -m SimpleHTTPServer 9000
+
+    # and in another terminal
+    # create a python 3 virtual environment venv (all as usual)
+    virtualenv -p python3 venv
+    cd venv
+    source bin/activate
+    # now in python
+    python 3
+    >>> from boos import Boos
+    >>> booz = Boos("http://boos.fritz.box:8090")
+    >>> booz.preset(3)
+
