@@ -68,10 +68,10 @@ class Boos:
     def presets(self):
         r = requests.get(self.host + '/presets')
         doc = minidom.parseString(r.text)
-        presets = {}
+        items = {}
         for preset in doc.getElementsByTagName('presets')[0].childNodes:
-            presets[preset.getAttributeNode('id').value] = preset.getElementsByTagName('itemName')[0].childNodes[0].data
-        return (presets)
+            items[preset.getAttributeNode('id').value] = preset.getElementsByTagName('itemName')[0].childNodes[0].data
+        return items
 
     def state(self):
         # ContentItem source="INTERNET_RADIO"
@@ -86,11 +86,23 @@ class Boos:
             return "STANDBY"
         else:
             # check if play status is STOP_STATE, meaning is paused
-            play_status = doc.getElementsByTagName("playStatus")[0].firstChild.data
-            if play_status == "PAUSE_STATE" or play_status == "STOP_STATE":
-                return "PAUSED"
+            if len(doc.getElementsByTagName("playStatus")) > 0:
+                play_status = doc.getElementsByTagName("playStatus")[0].firstChild.data
+                if play_status == "PAUSE_STATE" or play_status == "STOP_STATE":
+                    return "PAUSED"
+                else:
+                    return source
             else:
                 return source
+
+    def now_playing(self):
+        path = '/now_playing'
+        r = requests.get(self.host+path)
+        doc = minidom.parseString(r.text)
+        if doc.getElementsByTagName('artist') and doc.getElementsByTagName('track'):
+            artist = doc.getElementsByTagName('artist')[0].childNodes[0].data
+            track = doc.getElementsByTagName('track')[0].childNodes[0].data
+            return "{artist} - {track}".format(artist=artist, track=track)
 
     def _send_key(self, key):
         path = '/key'
