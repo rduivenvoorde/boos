@@ -65,6 +65,14 @@ class Boos:
         key = 'PRESET_%s' % preset
         self._send_key(key)
 
+    def presets(self):
+        r = requests.get(self.host + '/presets')
+        doc = minidom.parseString(r.text)
+        presets = {}
+        for preset in doc.getElementsByTagName('presets')[0].childNodes:
+            presets[preset.getAttributeNode('id').value] = preset.getElementsByTagName('itemName')[0].childNodes[0].data
+        return (presets)
+
     def state(self):
         # ContentItem source="INTERNET_RADIO"
         # <ContentItem source="STANDBY" isPresetable="true"/> == OFF/STANDBY
