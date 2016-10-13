@@ -98,3 +98,12 @@ class Boos:
         release = '<key state="release" sender="Gabbo">%s</key>' % key
         r = requests.post(self.host+path, release)
         #print(r.text)
+
+    def name(self):
+        info = self._info()
+        return info.getElementsByTagName("name")[0].childNodes[0].data
+
+    def _info(self):
+        r = requests.get(self.host + '/info')
+        doc = minidom.parseString(r.text)
+        return doc
