@@ -55,7 +55,10 @@ Or if you can run python 3 code for example on Linux:
     boos vol
     boos vol 30
 
-Or create a virtualenv and create some bash file::
+Or create a virtualenv and create some bash file:
+
+.. code-block::
+
     virtualenv -p python3 boos
     cd boos
     pip install boos
