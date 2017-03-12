@@ -15,7 +15,10 @@ def main(command='state', argument=-1):
     if command == 'vol':
         # volume
         if argument < 0:
-            boos.vol()
+            if boos.muted():
+                print('{} - (MUTED)'.format(boos.vol()))
+            else:
+                print(boos.vol())
         else:
             boos.vol(argument)
     elif command == 'power':
@@ -25,23 +28,35 @@ def main(command='state', argument=-1):
     elif command == 'prev':
         boos.prev()
     elif command == 'mute':
+        # first print new state (that is why if muted we print Unmuted)
+        if boos.muted():
+            print('Unmuted')
+        else:
+            print('Muted')
         boos.mute()
     elif command == 'aux':
         boos.aux()
     elif command == 'state':
-        boos.state()
+        print(boos.state())
+        print(boos.now_playing())
     elif command == 'pause':
         boos.pause()
     elif command == 'play':
         boos.play()
     elif command == 'volup':
         boos.volup()
+        print(boos.vol())
     elif command == 'voldown':
         boos.voldown()
+        print(boos.vol())
     elif command == 'muted':
-        boos.muted()
-    elif command == 'set' and argument > 0:
-        boos.preset(argument)
+        print(boos.muted())
+    elif command == 'set':
+        if argument > 0:
+            boos.preset(argument)
+        else:
+            for n in range(1, 7):
+                print('{}: {}'.format(n, boos.presets()[str(n)]))
     else:
         print("NOT IMPLEMENTED")
 
