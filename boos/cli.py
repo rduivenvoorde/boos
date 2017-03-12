@@ -6,7 +6,7 @@ from boos import Boos
 
 @plac.annotations(
         command=("Commando", 'positional', None, str,
-                 ['power', 'set', 'vol', 'mute', 'aux', 'next', 'prev', 'state', 'pause', 'play', 'volup', 'voldown',
+                 ['name', 'power', 'set', 'vol', 'mute', 'aux', 'next', 'prev', 'state', 'pause', 'play', 'volup', 'voldown',
                   'muted']),
         argument=("Optional command argument", 'positional', None, int, None, "n"))
 def main(command='state', argument=-1):
@@ -36,6 +36,8 @@ def main(command='state', argument=-1):
         boos.mute()
     elif command == 'aux':
         boos.aux()
+    elif command == 'name':
+        print(boos.name())
     elif command == 'state':
         print(boos.state())
         print(boos.now_playing())

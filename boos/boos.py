@@ -126,5 +126,6 @@ class Boos:
 
     def _info(self):
         r = requests.get(self.host + '/info')
+        #print(r.text)
         doc = minidom.parseString(r.text)
         return doc
