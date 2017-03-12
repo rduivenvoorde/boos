@@ -55,6 +55,19 @@ Or if you can run python 3 code for example on Linux:
     boos vol
     boos vol 30
 
+Or create a virtualenv and create some bash file::
+    virtualenv -p python3 boos
+    cd boos
+    pip install boos
+
+    # and a bash file like:
+
+    #!/bin/bash
+
+    source /home/richard/venv/boos/bin/activate
+    /home/richard/dev/boos/boos/cli.py "$@"
+
+
 Links
 -----
 
@@ -85,18 +98,35 @@ All from https://python-packaging-user-guide.readthedocs.org/en/latest/distribut
     cd venv
     source bin/activate
     # now in python
-    python 3
+    python3
     >>> from boos import Boos
     >>> booz = Boos("http://boos.fritz.box:8090")
-    >>> booz.preset(3)
+    >>> booz.preset(3)            # setting to preset 3
+    >>> print(booz.now_playing()) # should show current playing song/source
 
     # https://packaging.python.org/en/latest/distributing/#uploading-your-project-to-pypi
+    #
+    # create a .pypirc file in home dir
+    [distutils]
+    index-servers=
+        pypi
+        testpypi
+
+    [testpypi]
+    repository = https://testpypi.python.org/pypi
+    username = <your user name goes here>
+    password = <your password goes here>
+
+    [pypi]
+    repository = https://pypi.python.org/pypi
+    username = <your user name goes here>
+    password = <your password goes here>
     #
     # to upload it to testpypi (https://wiki.python.org/moin/TestPyPI)
     # first register the project
     python setup.py register -r https://testpypi.python.org/pypi
-    # preferred (but not working with me):
-    twine upload -r https://testpypi.python.org/pypi -u rduivenvoorde -p <PASSWORD> dist/*
+    # preferred (given you have username and testpypi as key in .pypirc:
+    twine upload -r testpypi dist/*
     # or
     python setup.py sdist upload -r https://testpypi.python.org/pypi
     # after upload install via
@@ -109,8 +139,8 @@ All from https://python-packaging-user-guide.readthedocs.org/en/latest/distribut
     # preferred:
     # first register project
     python setup.py register
-    # then preferred
-    twine upload dist/*
+    # preferred (given you have username and testpypi as key in .pypirc:
+    twine upload -r pypi dist/*
     # or
     python setup.py sdist upload -r https://pypi.python.org/pypi
     # and install
