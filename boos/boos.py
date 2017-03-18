@@ -100,12 +100,13 @@ class Boos:
         r = requests.get(self.host+path)
         #print(r.text)
         doc = minidom.parseString(r.text)
-        if doc.getElementsByTagName('artist')[0].childNodes and doc.getElementsByTagName('track')[0].childNodes:
+        if len(doc.getElementsByTagName('artist')) > 0 and doc.getElementsByTagName('artist')[0].childNodes and \
+                doc.getElementsByTagName('track')[0].childNodes:
             # spotify etc
             artist = doc.getElementsByTagName('artist')[0].childNodes[0].data
             track = doc.getElementsByTagName('track')[0].childNodes[0].data
             return "{artist} - {track}".format(artist=artist, track=track)
-        elif doc.getElementsByTagName('stationName')[0].childNodes:
+        elif len(doc.getElementsByTagName('stationName')) > 0 and doc.getElementsByTagName('stationName')[0].childNodes:
             station_name = doc.getElementsByTagName('stationName')[0].childNodes[0].data
             return "{}".format(station_name)
         else:
