@@ -6,7 +6,7 @@ from boos import Boos
 
 @plac.annotations(
         command=("Commando", 'positional', None, str,
-                 ['name', 'power', 'set', 'vol', 'mute', 'aux', 'next', 'prev', 'state', 'pause', 'play', 'volup', 'voldown',
+                 ['name', 'power', 'set', 'sets', 'vol', 'mute', 'aux', 'next', 'prev', 'state', 'pause', 'play', 'volup', 'voldown',
                   'muted']),
         argument=("Optional command argument", 'positional', None, int, None, "n"))
 def main(command='state', argument=-1):
@@ -57,8 +57,10 @@ def main(command='state', argument=-1):
         if argument > 0:
             boos.preset(argument)
         else:
-            for n in range(1, 7):
-                print('{}: {}'.format(n, boos.presets()[str(n)]))
+            print(boos.preset())
+    elif command == 'sets':
+        for n in range(1, 7):
+           print('{}: {}'.format(n, boos.presets()[str(n)]))
     else:
         print("NOT IMPLEMENTED")
 

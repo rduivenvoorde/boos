@@ -60,10 +60,22 @@ class Boos:
             volume = '<volume>%s</volume>' % volume_0_100
             r = requests.post(self.host+path, volume)
 
-    def preset(self, preset):
-        # set preset
-        key = 'PRESET_%s' % preset
-        self._send_key(key)
+    def preset(self, preset=None):
+        if preset is None:
+            items = self.presets()
+            path = '/now_playing'
+            r = requests.get(self.host+path)
+            #print(r.text)
+            doc = minidom.parseString(r.text)
+            if len(doc.getElementsByTagName('itemName'))>0:
+                name = doc.getElementsByTagName('itemName')[0].childNodes[0].data
+                for nr in items:
+                    if name == items[nr]:
+                        return nr
+        else:
+            # set preset
+            key = 'PRESET_%s' % preset
+            self._send_key(key)
 
     def presets(self):
         r = requests.get(self.host + '/presets')
