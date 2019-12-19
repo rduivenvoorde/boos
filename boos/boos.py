@@ -65,13 +65,25 @@ class Boos:
             items = self.presets()
             path = '/now_playing'
             r = requests.get(self.host+path)
+            # Requests lib uses 'educated guesses' about encoding. This fails as apparently wrong Content-Type Headers is received
+            # using r.apperent_encoding uses better guesses
+            # see https://stackoverflow.com/questions/44203397/python-requests-get-returns-improperly-decoded-text-instead-of-utf-8
+            r.encoding = r.apparent_encoding
             #print(r.text)
             doc = minidom.parseString(r.text)
             if len(doc.getElementsByTagName('itemName'))>0:
-                name = doc.getElementsByTagName('itemName')[0].childNodes[0].data
-                for nr in items:
-                    if name == items[nr]:
-                        return nr
+                # presets have an itemName with the name of the preset as text data
+                if len(doc.getElementsByTagName('itemName')[0].childNodes)>0:
+                    name = doc.getElementsByTagName('itemName')[0].childNodes[0].data
+                    for nr in items:
+                        if name == items[nr]:
+                            return nr
+                # if NOT using a preset (1-6), it can be Bluetooth or Spotify, which is in the doc shown as:
+                # <ContentItem source="BLUETOOTH" location="" sourceAccount="" isPresetable="false">
+                source = doc.getElementsByTagName("ContentItem")[0].attributes["source"].value
+                return source.title() # let's make it Title-case else BLUETOOTH and SPOTIFY etc
+            # if all fails
+            return '?'
         else:
             # set preset
             key = 'PRESET_%s' % preset
@@ -110,19 +122,24 @@ class Boos:
     def now_playing(self):
         path = '/now_playing'
         r = requests.get(self.host+path)
-        #print(r.text)
+        # Requests lib uses 'educated guesses' about encoding. This fails as apparently wrong Content-Type Headers is received
+        # using r.apperent_encoding uses better guesses
+        # see https://stackoverflow.com/questions/44203397/python-requests-get-returns-improperly-decoded-text-instead-of-utf-8
+        r.encoding = r.apparent_encoding
         doc = minidom.parseString(r.text)
+        #print(r.text)
+        # if the doc contains artist and track:
         if len(doc.getElementsByTagName('artist')) > 0 and doc.getElementsByTagName('artist')[0].childNodes and \
                 doc.getElementsByTagName('track')[0].childNodes:
-            # spotify etc
             artist = doc.getElementsByTagName('artist')[0].childNodes[0].data
             track = doc.getElementsByTagName('track')[0].childNodes[0].data
             return "{artist} - {track}".format(artist=artist, track=track)
+        # if the doc only contains the station_name
         elif len(doc.getElementsByTagName('stationName')) > 0 and doc.getElementsByTagName('stationName')[0].childNodes:
             station_name = doc.getElementsByTagName('stationName')[0].childNodes[0].data
             return "{}".format(station_name)
         else:
-            return ''
+            return '?'
 
     def _send_key(self, key):
         path = '/key'
