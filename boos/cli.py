@@ -10,7 +10,7 @@ from boos import Boos
                   'muted']),
         argument=("Optional command argument", 'positional', None, int, None, "n"))
 def main(command='state', argument=-1):
-    host = 'http://boos.fritz.box:8090'
+    host = 'http://192.168.178.21:8090'
     boos = Boos(host)
     if command == 'vol':
         # volume

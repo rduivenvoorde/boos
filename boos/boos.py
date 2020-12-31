@@ -103,9 +103,12 @@ class Boos:
         # <playStatus>STOP_STATE</playStatus>  == PAUSE
         path = '/now_playing'
         r = requests.get(self.host+path)
-        #print(r.text)
+        print(r.text)
         doc = minidom.parseString(r.text)
-        source = doc.getElementsByTagName("ContentItem")[0].attributes["source"].value
+        source = '?'
+        # some xml messages miss a 'source' tag, so we really have to check for it!
+        if len(doc.getElementsByTagName("ContentItem")) > 0:
+            source = doc.getElementsByTagName("ContentItem")[0].attributes["source"].value
         if source == "STANDBY":
             return "STANDBY"
         else:
